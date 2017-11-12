@@ -1,0 +1,6 @@
+- Barrack
+	https://wiki.openttd.org/Factory
+- Power Station
+	https://wiki.openttd.org/Power_Station
+- Soldier
+	http://clipart-library.com/soldier-cliparts.html
