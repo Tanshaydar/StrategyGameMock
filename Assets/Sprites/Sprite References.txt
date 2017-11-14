@@ -4,3 +4,5 @@
 	https://wiki.openttd.org/Power_Station
 - Soldier
 	http://clipart-library.com/soldier-cliparts.html
+- Grass
+    https://opengameart.org/content/rpg-overworld-images

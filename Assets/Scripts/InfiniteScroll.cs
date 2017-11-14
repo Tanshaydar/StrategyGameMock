@@ -192,7 +192,9 @@ public class InfiniteScroll : MonoBehaviour, IDropHandler {
 		int fillCount = Mathf.RoundToInt((float)Screen.currentResolution.height / height) + 2;
 		_views = new GameObject[fillCount];
 		for (int i = 0; i < fillCount; i++) {
-			clone = (GameObject)Instantiate (prefab, Vector3.zero, Quaternion.identity);
+			clone = Instantiate (prefab, Vector3.zero, Quaternion.identity);
+			clone.GetComponentInChildren<PowerPlantButton>().Identifier = i;
+			clone.GetComponentInChildren<BarrackButton>().Identifier = i;
 			clone.transform.SetParent (_content);
 			clone.transform.localScale = Vector3.one;
 			clone.transform.localPosition = Vector3.zero;

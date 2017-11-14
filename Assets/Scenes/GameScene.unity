@@ -981,6 +981,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionPanel: {fileID: 2127385409}
+  PowerPlantMenu: {fileID: 174922572}
+  BarrackMenu: {fileID: 1345668339}
   InformationPanel: {fileID: 953621510}
   Map: {fileID: 616158164}
   GridBox: {fileID: 1543027600636572, guid: 89951ed67a172354ab9af845e26da2c1, type: 2}

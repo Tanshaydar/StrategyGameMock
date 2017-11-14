@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Controller : MonoBehaviour
+public class ProductionMenuController : MonoBehaviour
 {
     public InfiniteScroll scroll;
     private int count = 100000;
@@ -14,8 +14,8 @@ public class Controller : MonoBehaviour
             // change text, image, ect
             // by index we can get data from JSON array, i.g.
             // item.transform.GetChild(0).GetComponent<Text>().text = "item #" + index;
-            item.transform.GetChild(0).GetComponentInChildren<Text>().text = "Factory #" + index;
-            item.transform.GetChild(1).GetComponentInChildren<Text>().text = "Barrack #" + index;
+            item.transform.GetChild(0).GetComponentInChildren<Text>().text = "Barrack #" + index;
+            item.transform.GetChild(1).GetComponentInChildren<Text>().text = "PowerPlant #" + index;
         };
 
         scroll.PullLoad += (InfiniteScroll.Direction obj) =>

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222957005317680770}
   - component: {fileID: 114058247684384858}
   - component: {fileID: 114513785219885184}
+  - component: {fileID: 114299590376191012}
   m_Layer: 5
   m_Name: PowerPlant
   m_TagString: Untagged
@@ -91,8 +92,9 @@ GameObject:
   - component: {fileID: 222503230732088288}
   - component: {fileID: 114142103047187086}
   - component: {fileID: 114833976702326386}
+  - component: {fileID: 114679614918861548}
   m_Layer: 5
-  m_Name: Factory
+  m_Name: Barrack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,6 +187,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Barrack #1'
+--- !u!114 &114299590376191012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1349296806793950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad5f4b8bb4b7834a84c0670e79011ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114513785219885184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -260,6 +273,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Power Plant #1'
+--- !u!114 &114679614918861548
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1910624966547612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0189d4152c10084ca0ec9a85ccf387b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114723370550698588
 MonoBehaviour:
   m_ObjectHideFlags: 1
