@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,8 +11,9 @@ public abstract class PlaceableMapItem : MapItem {
 	private Vector3 _snapPosition;
 	private List<Collider2D> availableGrids;
 	private List<PlaceableMapItem> forbiddenGrids;
-	
-	public virtual void Awake()
+    protected int minX = Int32.MaxValue, minY = Int32.MaxValue;
+
+    public virtual void Awake()
 	{
 		_gameManager = FindObjectOfType<GameManager>();
 	}
@@ -39,19 +40,26 @@ public abstract class PlaceableMapItem : MapItem {
 		if (IsMoving && forbiddenGrids.Capacity == 0)
 		{
 			IsMoving = false;
-			float x = 0, y = 0;
+			float xPos = 0, yPos = 0;
 			foreach (Collider2D grid in availableGrids)
 			{
-				x += grid.transform.position.x;
-				y += grid.transform.position.y;
+				xPos += grid.transform.position.x;
+				yPos += grid.transform.position.y;
 				string[] splitter = grid.gameObject.name.Split(',');
-				_gameManager.AddWall(int.Parse(splitter[0]), int.Parse(splitter[1]));
+			    int x = int.Parse(splitter[0]);
+			    int y = int.Parse(splitter[1]);
+			    if (x < minX) minX = x;
+			    if (y < minY) minY = y;
+                _gameManager.AddWall(x, y);
 			}
-			x = x / availableGrids.Count;
-			y = y / availableGrids.Count;
+			xPos = xPos / availableGrids.Count;
+			yPos = yPos / availableGrids.Count;
+
+		    minX = minX - 1;
+		    minY = minY - 1;
 
 			availableGrids.Clear();
-			transform.position = new Vector3(x, y, 0);
+			transform.position = new Vector3(xPos, yPos, 0);
 			GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 			GetComponent<BoxCollider2D>().size = GetComponent<SpriteRenderer>().size;
 			GetComponent<SpriteRenderer>().color = Color.white;

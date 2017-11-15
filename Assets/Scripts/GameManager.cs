@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public PathNode[,] Grid { get; private set; }
     public GameObject Soldier;
 
+    [HideInInspector] public SoldierAStar SelectedSoldier;
+
     public static string distanceType;
 
     private List<Barrack> _barracks;
@@ -70,6 +72,21 @@ public class GameManager : MonoBehaviour
 
         //instantiate grid gameobjects to display on the scene
         CreateGrid();
+    }
+
+    void Update()
+    {
+        if (SelectedSoldier != null)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y), Vector2.zero, 0f);
+            if (hit.transform != null && hit.transform.name != null && hit.transform.name.Contains(","))
+            {
+                string[] splitter = hit.transform.name.Split(',');
+                int x = int.Parse(splitter[0]);
+                int y = int.Parse(splitter[1]);
+                SelectedSoldier.StartMoving(x,y);
+            }
+        }
     }
 
 
@@ -135,20 +152,21 @@ public class GameManager : MonoBehaviour
             {
                 if (barrack.SoldierSpawnPositions.Count == 0)
                 {
+                    Debug.LogWarning("There is not enough place for soldier");
                     isTherePlace = false;
                 }
                 else
                 {
                     spawnPosition = barrack.SoldierSpawnPositions[0];
-                    barrack.SoldierSpawnPositions.RemoveAt(0);
+                    barrack.SoldierSpawnPositions.Remove(spawnPosition);
                 }
             }
         }
         if (isTherePlace)
         {
             GameObject soldier = Instantiate(Soldier);
-            soldier.transform.position = spawnPosition;
             soldier.SetActive(true);
+            Soldier.GetComponent<SoldierAStar>().InitializePosition((int) spawnPosition.x, (int) spawnPosition.y);
         }
     }
 

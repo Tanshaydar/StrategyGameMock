@@ -8,6 +8,11 @@ using Random = UnityEngine.Random;
 
 public class SoldierAStar : MonoBehaviour
 {
+    public Sprite SoldierUp;
+    public Sprite SoldierDown;
+    public Sprite SoldierRight;
+    public Sprite SoldierLeft;
+
     private GameManager _gameManager;
     public PathNode nextNode;
     bool gray = false;
@@ -28,6 +33,11 @@ public class SoldierAStar : MonoBehaviour
     private float t;
     private float factor;
     private Color myColor;
+    private enum Orientation
+    {
+        Horizontal,
+        Vertical
+    };
 
     private void Awake()
     {
@@ -44,24 +54,19 @@ public class SoldierAStar : MonoBehaviour
             int dx = Math.Abs(inStart.X - inEnd.X);
             int dy = Math.Abs(inStart.Y - inEnd.Y);
 
-            if (formula == 0)
-                return Math.Sqrt(dx * dx + dy * dy); //Euclidean distance
-
-            else if (formula == 1)
-                return (dx * dx + dy * dy); //Euclidean distance squared
-
-            else if (formula == 2)
-                return Math.Min(dx, dy); //Diagonal distance
-
-            else if (formula == 3)
-                return (dx * dy) + (dx + dy); //Manhatten distance
-
-
-            else
-                return Math.Abs(inStart.X - inEnd.X) + Math.Abs(inStart.Y - inEnd.Y);
-
-            //return 1*(Math.Abs(inStart.X - inEnd.X) + Math.Abs(inStart.Y - inEnd.Y) - 1); //optimized tile based Manhatten
-            //return ((dx * dx) + (dy * dy)); //Khawaja distance
+            switch (formula)
+            {
+                case 0:
+                    return Math.Sqrt(dx * dx + dy * dy); //Euclidean distance
+                case 1:
+                    return (dx * dx + dy * dy); //Euclidean distance squared
+                case 2:
+                    return Math.Min(dx, dy); //Diagonal distance
+                case 3:
+                    return (dx * dy) + (dx + dy); //Manhatten distance
+                default:
+                    return Math.Abs(inStart.X - inEnd.X) + Math.Abs(inStart.Y - inEnd.Y);
+            }
         }
 
         protected override Double NeighborDistance(PathNode inStart, PathNode inEnd)
@@ -69,8 +74,7 @@ public class SoldierAStar : MonoBehaviour
             return Heuristic(inStart, inEnd);
         }
 
-        public MySolver(TPathNode[,] inGrid)
-            : base(inGrid)
+        public MySolver(TPathNode[,] inGrid) : base(inGrid)
         {
         }
     }
@@ -160,30 +164,11 @@ public class SoldierAStar : MonoBehaviour
     }
 
 
-    public float moveSpeed;
 
-    public class gridPosition
-    {
-        public int x = 0;
-        public int y = 0;
-
-        public gridPosition()
         {
         }
 
-        public gridPosition(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    };
 
-
-    private enum Orientation
-    {
-        Horizontal,
-        Vertical
-    };
 
 
     public IEnumerator move()
@@ -246,22 +231,22 @@ public class SoldierAStar : MonoBehaviour
         if (nextNode.X > currentGridPosition.x)
         {
             input.x = 1;
-            this.GetComponent<SpriteRenderer>().sprite = _gameManager.carFront;
+            this.GetComponent<SpriteRenderer>().sprite = SoldierRight;
         }
         if (nextNode.Y > currentGridPosition.y)
         {
             input.y = 1;
-            this.GetComponent<SpriteRenderer>().sprite = _gameManager.carUp;
+            this.GetComponent<SpriteRenderer>().sprite = SoldierUp;
         }
         if (nextNode.Y < currentGridPosition.y)
         {
             input.y = -1;
-            this.GetComponent<SpriteRenderer>().sprite = _gameManager.carDown;
+            this.GetComponent<SpriteRenderer>().sprite = SoldierDown;
         }
         if (nextNode.X < currentGridPosition.x)
         {
             input.x = -1;
-            this.GetComponent<SpriteRenderer>().sprite = _gameManager.carBack;
+            this.GetComponent<SpriteRenderer>().sprite = SoldierLeft;
         }
 
         StartCoroutine(move());
