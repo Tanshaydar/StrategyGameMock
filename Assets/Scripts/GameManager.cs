@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -23,18 +24,23 @@ public class GameManager : MonoBehaviour
     }
 
     public PathNode[,] Grid { get; private set; }
-    public GameObject enemy;
-    
-    public Sprite carUp;
-    public Sprite carDown;
-    public Sprite carFront;
-    public Sprite carBack;    
+    public GameObject Soldier;
 
     public static string distanceType;
 
+    private List<Barrack> _barracks;
+    private List<PowerPlant> _powerPlants;
+    private List<SoldierAStar> _soldiers;
 
     //This is what you need to show in the inspector.
-    public static int distance = 2;
+    public static readonly int distance = 2;
+
+    void Awake()
+    {
+        _barracks = new List<Barrack>();
+        _powerPlants = new List<PowerPlant>();
+        _soldiers = new List<SoldierAStar>();
+    }
 
     void Start()
     {
@@ -64,9 +70,6 @@ public class GameManager : MonoBehaviour
 
         //instantiate grid gameobjects to display on the scene
         CreateGrid();
-
-        //instantiate enemy object
-//        createEnemy();
     }
 
 
@@ -92,7 +95,9 @@ public class GameManager : MonoBehaviour
     {
         DisableMenus();
         GameObject barrack = Instantiate(Barrack);
-        barrack.GetComponent<Barrack>().Identifier = identifier;
+        Barrack b = barrack.GetComponent<Barrack>();
+        b.Identifier = identifier;
+        _barracks.Add(b);
     }
 
     public void CreatePowerPlant(int identifier)
@@ -108,10 +113,43 @@ public class GameManager : MonoBehaviour
         PowerPlantMenu.gameObject.SetActive(false);
     }
 
-    void CreateSoldier()
+    public void ShowBarrackMenu()
     {
-        GameObject nb = (GameObject) Instantiate(enemy);
-        nb.SetActive(true);
+        BarrackMenu.gameObject.SetActive(true);
+        PowerPlantMenu.gameObject.SetActive(false);
+    }
+
+    public void ShowPowerPlantMenu()
+    {
+        BarrackMenu.gameObject.SetActive(false);
+        PowerPlantMenu.gameObject.SetActive(true);
+    }
+
+    public void CreateSoldier(int identifier)
+    {
+        bool isTherePlace = true;
+        Vector2 spawnPosition = new Vector2();
+        foreach (Barrack barrack in _barracks)
+        {
+            if (barrack.Identifier == identifier)
+            {
+                if (barrack.SoldierSpawnPositions.Count == 0)
+                {
+                    isTherePlace = false;
+                }
+                else
+                {
+                    spawnPosition = barrack.SoldierSpawnPositions[0];
+                    barrack.SoldierSpawnPositions.RemoveAt(0);
+                }
+            }
+        }
+        if (isTherePlace)
+        {
+            GameObject soldier = Instantiate(Soldier);
+            soldier.transform.position = spawnPosition;
+            soldier.SetActive(true);
+        }
     }
 
     public void AddWall(int x, int y)
@@ -124,5 +162,4 @@ public class GameManager : MonoBehaviour
         Grid[x, y].IsWall = false;
     }
 
-    
 }
