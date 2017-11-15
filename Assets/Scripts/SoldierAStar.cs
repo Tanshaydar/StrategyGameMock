@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using SettlersEngine;
 using UnityEngine;
 using Object = System.Object;
-using Random = UnityEngine.Random;
 
 public class SoldierAStar : MonoBehaviour
 {
@@ -19,9 +18,9 @@ public class SoldierAStar : MonoBehaviour
     public PathNode[,] grid;
 
 
-    public gridPosition currentGridPosition = new gridPosition();
-    public gridPosition startGridPosition = new gridPosition();
-    public gridPosition endGridPosition = new gridPosition();
+    public GridPosition currentGridPosition = new GridPosition(0,0);
+    public Vector2 startGridPosition;
+    public GridPosition endGridPosition = new GridPosition(0,0);
 
     private Orientation gridOrientation = Orientation.Vertical;
     private bool allowDiagonals = false;
@@ -33,6 +32,8 @@ public class SoldierAStar : MonoBehaviour
     private float t;
     private float factor;
     private Color myColor;
+    public float moveSpeed;
+
     private enum Orientation
     {
         Horizontal,
@@ -44,6 +45,18 @@ public class SoldierAStar : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
     }
 
+    void Update()
+    {
+        if (!isMoving)
+        {
+            StartCoroutine(Move());
+        }
+    }
+
+    void OnMouseDown()
+    {
+        _gameManager.SelectedSoldier = gameObject;
+    }
 
     public class MySolver<TPathNode, TUserContext> : SpatialAStar<TPathNode,
         TUserContext> where TPathNode : IPathNode<TUserContext>
@@ -81,15 +94,28 @@ public class SoldierAStar : MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
+    public void InitializeSoldier(int x, int y)
     {
-        myColor = getRandomColor();
+        if (_gameManager == null)
+        {
+            _gameManager = FindObjectOfType<GameManager>();
+        }
 
-        startGridPosition = new gridPosition(0, Random.Range(0, _gameManager.GridHeight - 1));
-        endGridPosition = new gridPosition(_gameManager.GridWidth - 1,
-            Random.Range(0, _gameManager.GridHeight - 1));
-        initializePosition();
+        myColor = Color.yellow;
+        startGridPosition = new Vector2(x, y);
+        Debug.Log("Start Grid Position1 : " + startGridPosition.x + "-" + startGridPosition.y);
+        InitializePosition();
+    }
 
+    public void StartMoving(int x, int y)
+    {
+        Debug.Log("Start moving to: " + x + "-" + y);
+        endGridPosition = new GridPosition(x, y);
+
+        isMoving = false;
+        Debug.Log("Start Grid Position3 : " + startGridPosition.x + "-" + startGridPosition.y);
+        GameObject.Find(startGridPosition.x + "," + startGridPosition.y).GetComponent<SpriteRenderer>().material.color =
+            Color.black;
 
         MySolver<PathNode, Object> aStar = new MySolver<PathNode, Object>(_gameManager.Grid);
         IEnumerable<PathNode> path = aStar.Search(new Vector2(startGridPosition.x, startGridPosition.y),
@@ -98,17 +124,17 @@ public class SoldierAStar : MonoBehaviour
 
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("GridBox"))
         {
-            g.GetComponent<Renderer>().material.color = Color.white;
+            g.GetComponent<SpriteRenderer>().color = Color.white;
         }
 
 
-        updatePath();
+        UpdatePath();
 
-        this.GetComponent<Renderer>().material.color = myColor;
+        GetComponent<SpriteRenderer>().color = Color.yellow;
     }
 
 
-    public void findUpdatedPath(int currentX, int currentY)
+    public void FindUpdatedPath(int currentX, int currentY)
     {
         MySolver<PathNode, Object> aStar = new MySolver<PathNode, Object>(_gameManager.Grid);
         IEnumerable<PathNode> path = aStar.Search(new Vector2(currentX, currentY),
@@ -133,63 +159,47 @@ public class SoldierAStar : MonoBehaviour
 
             foreach (GameObject g in GameObject.FindGameObjectsWithTag("GridBox"))
             {
-                if (g.GetComponent<SpriteRenderer>().material.color != Color.red &&
-                    g.GetComponent<SpriteRenderer>().material.color == myColor)
+                if (g.GetComponent<SpriteRenderer>().color != Color.red &&
+                    g.GetComponent<SpriteRenderer>().color == myColor)
                     g.GetComponent<SpriteRenderer>().material.color = Color.white;
             }
 
 
             foreach (PathNode node in path)
             {
-                GameObject.Find(node.X + "," + node.Y).GetComponent<SpriteRenderer>().material.color = myColor;
+                GameObject.Find(node.X + "," + node.Y).GetComponent<SpriteRenderer>().color = Color.yellow;
             }
         }
     }
 
-
-    Color getRandomColor()
-    {
-        Color tmpCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f),
-            Random.Range(0f, 1f));
-        return tmpCol;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!isMoving)
-        {
-            StartCoroutine(move());
-        }
-    }
-
-
-
-        {
-        }
-
-
-
-
-    public IEnumerator move()
+    public IEnumerator Move()
     {
         isMoving = true;
         startPosition = transform.position;
+        Debug.Log("Start pos: " + startPosition);
         t = 0;
 
         if (gridOrientation == Orientation.Horizontal)
         {
+            Debug.Log("horizontal");
             endPosition = new Vector2(startPosition.x + Math.Sign(input.x) * _gameManager.GridSize,
                 startPosition.y);
+            Debug.Log("End pos: " + endPosition);
+            Debug.Log(input.x);
+            Debug.Log(input.y);
             currentGridPosition.x += Math.Sign(input.x);
         }
         else
         {
+            Debug.Log("vertical");
             endPosition = new Vector2(startPosition.x + Math.Sign(input.x) * _gameManager.GridSize,
                 startPosition.y + Math.Sign(input.y) * _gameManager.GridSize);
-
+            Debug.Log("End pos: " + endPosition);
+            Debug.Log(input.x);
+            Debug.Log(input.y);
             currentGridPosition.x += Math.Sign(input.x);
             currentGridPosition.y += Math.Sign(input.y);
+            Debug.Log(currentGridPosition.x  + " - " + currentGridPosition.y);
         }
 
         if (allowDiagonals && correctDiagonalSpeed && input.x != 0 && input.y != 0)
@@ -209,22 +219,20 @@ public class SoldierAStar : MonoBehaviour
             yield return null;
         }
 
-
+        Debug.Log("---------------");
         isMoving = false;
-        getNextMovement();
-
+        GetNextMovement();
         yield return 0;
     }
 
-    void updatePath()
+    void UpdatePath()
     {
-        findUpdatedPath(currentGridPosition.x, currentGridPosition.y);
+        FindUpdatedPath(currentGridPosition.x, currentGridPosition.y);
     }
 
-    void getNextMovement()
+    void GetNextMovement()
     {
-        updatePath();
-
+        UpdatePath();
 
         input.x = 0;
         input.y = 0;
@@ -249,25 +257,15 @@ public class SoldierAStar : MonoBehaviour
             this.GetComponent<SpriteRenderer>().sprite = SoldierLeft;
         }
 
-        StartCoroutine(move());
+        StartCoroutine(Move());
     }
-
-    public Vector2 getGridPosition(int x, int y)
+    
+    private void InitializePosition()
     {
-        float contingencyMargin = _gameManager.GridSize * .10f;
-        float posX = _gameManager.GridBox.transform.position.x + (_gameManager.GridSize * x) - contingencyMargin;
-        float posY = _gameManager.GridBox.transform.position.y + (_gameManager.GridSize * y) + contingencyMargin;
-        return new Vector2(posX, posY);
-    }
-
-
-    public void initializePosition()
-    {
-        this.gameObject.transform.position = getGridPosition(startGridPosition.x, startGridPosition.y);
-        currentGridPosition.x = startGridPosition.x;
-        currentGridPosition.y = startGridPosition.y;
-        isMoving = false;
-        GameObject.Find(startGridPosition.x + "," + startGridPosition.y).GetComponent<SpriteRenderer>().material.color =
-            Color.black;
+        GameObject gridbox = GameObject.Find(startGridPosition.x + "," + startGridPosition.y);
+        transform.position = gridbox.transform.position;
+        currentGridPosition.x = (int) startGridPosition.x;
+        currentGridPosition.y = (int) startGridPosition.y;
+        Debug.Log("Start Grid Position2 : " + startGridPosition.x + "-" + startGridPosition.y);
     }
 }

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public PathNode[,] Grid { get; private set; }
     public GameObject Soldier;
 
-    [HideInInspector] public SoldierAStar SelectedSoldier;
+    [HideInInspector] public GameObject SelectedSoldier;
 
     public static string distanceType;
 
@@ -76,15 +76,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (SelectedSoldier != null)
+        if (Input.GetMouseButton(0))
         {
-            RaycastHit2D hit = Physics2D.Raycast(new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y), Vector2.zero, 0f);
-            if (hit.transform != null && hit.transform.name != null && hit.transform.name.Contains(","))
+            if (SelectedSoldier != null)
             {
-                string[] splitter = hit.transform.name.Split(',');
-                int x = int.Parse(splitter[0]);
-                int y = int.Parse(splitter[1]);
-                SelectedSoldier.StartMoving(x,y);
+                RaycastHit2D hit = Physics2D.Raycast(new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y), Vector2.zero, 0f);
+                if (hit.transform != null && hit.transform.name != null && hit.transform.name.Contains(","))
+                {
+                    string[] splitter = hit.transform.name.Split(',');
+                    int x = int.Parse(splitter[0]);
+                    int y = int.Parse(splitter[1]);
+                    SelectedSoldier.GetComponent<SoldierAStar>().StartMoving(x, y);
+                }
             }
         }
     }
@@ -164,9 +167,11 @@ public class GameManager : MonoBehaviour
         }
         if (isTherePlace)
         {
-            GameObject soldier = Instantiate(Soldier);
+            GameObject gridbox = GameObject.Find((int)spawnPosition.x + "," + (int)spawnPosition.y);
+            transform.position = gridbox.transform.position;
+            GameObject soldier = Instantiate(Soldier, gridbox.transform.position, gridbox.transform.rotation);
             soldier.SetActive(true);
-            Soldier.GetComponent<SoldierAStar>().InitializePosition((int) spawnPosition.x, (int) spawnPosition.y);
+            Soldier.GetComponent<SoldierAStar>().InitializeSoldier((int) spawnPosition.x, (int) spawnPosition.y);
         }
     }
 

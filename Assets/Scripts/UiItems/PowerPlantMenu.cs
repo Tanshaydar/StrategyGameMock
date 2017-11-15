@@ -13,6 +13,10 @@ public class PowerPlantMenu : MonoBehaviour
 
     public void ShowPowerPlantMenu(int identifier)
     {
+        if (_gameManager == null)
+        {
+            _gameManager = FindObjectOfType<GameManager>();
+        }
         _gameManager.DisableMenus();
         gameObject.SetActive(true);
         MenuText.text = "Power Plant #" + identifier;
