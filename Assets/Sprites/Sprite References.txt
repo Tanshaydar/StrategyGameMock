@@ -2,7 +2,9 @@
 	https://wiki.openttd.org/Factory
 - Power Station
 	https://wiki.openttd.org/Power_Station
-- Soldier
+- Soldier Button
 	http://clipart-library.com/soldier-cliparts.html
 - Grass
     https://opengameart.org/content/rpg-overworld-images
+- Soldier
+	https://opengameart.org/content/animated-top-down-survivor-player
