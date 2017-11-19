@@ -153,6 +153,7 @@ public class GameManager : MonoBehaviour
         {
             if (barrack.Identifier == identifier)
             {
+                barrack.UpdateSoldierSpawnPositions();
                 if (barrack.SoldierSpawnPositions.Count == 0)
                 {
                     Debug.LogWarning("There is not enough place for soldier");

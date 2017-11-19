@@ -51,4 +51,9 @@ public class Barrack : PlaceableMapItem
             }
         }        
     }
+
+    public void UpdateSoldierSpawnPositions()
+    {
+        SoldierSpawnPositions.RemoveAll(spawnPosition => _gameManager.Grid[(int)spawnPosition.x, (int)spawnPosition.y].IsWall);
+    }
 }
