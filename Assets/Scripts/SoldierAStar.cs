@@ -55,7 +55,7 @@ public class SoldierAStar : MonoBehaviour
 
     void OnMouseDown()
     {
-        _gameManager.SelectedSoldier = gameObject;
+        _gameManager.SelectedSoldier = this;
     }
 
     public class MySolver<TPathNode, TUserContext> : SpatialAStar<TPathNode,

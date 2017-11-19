@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public PathNode[,] Grid { get; private set; }
     public GameObject Soldier;
 
-    [HideInInspector] public GameObject SelectedSoldier;
+    [HideInInspector] public SoldierAStar SelectedSoldier;
 
     public static string distanceType;
 
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
                     string[] splitter = hit.transform.name.Split(',');
                     int x = int.Parse(splitter[0]);
                     int y = int.Parse(splitter[1]);
-                    SelectedSoldier.GetComponent<SoldierAStar>().StartMoving(x, y);
+                    SelectedSoldier.StartMoving(x, y);
                 }
             }
         }
