@@ -1,25 +1,26 @@
-﻿using UnityEngine;
+﻿using EventAggregation;
+using EventAggregation.Messages;
+using UiItems;
 using UnityEngine.UI;
 
-public class BarrackMenu : MonoBehaviour
+public class BarrackMenu : BaseMenu
 {
     public Text MenuText;
-    private GameManager _gameManager;
     private SoldierButton _soldierButton;
+
+    public BarrackMenu()
+    {
+        Type = MenuBuildingType.Barrack;
+    }
 
     public void Awake()
     {
-        _gameManager = FindObjectOfType<GameManager>();
         _soldierButton = GetComponentInChildren<SoldierButton>();
     }
 
-    public void ShowBarrackMenu(int identifier)
+    protected override void Show(int identifier)
     {
-        if (_gameManager == null)
-        {
-            _gameManager = FindObjectOfType<GameManager>();
-        }
-        _gameManager.DisableMenus();
+        EventAggregator.Instance.Publish(new HideMenuExceptMessage(MenuBuildingType.Barrack));
         gameObject.SetActive(true);
         MenuText.text = "Barrack #" + identifier;
         _soldierButton.SetIdentifier(identifier);

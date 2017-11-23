@@ -1,4 +1,7 @@
-﻿public class PowerPlant : PlaceableMapItem
+﻿using EventAggregation;
+using EventAggregation.Messages;
+
+public class PowerPlant : PlaceableMapItem
 {
     public int Identifier { get; set; }
 
@@ -6,7 +9,7 @@
     {
         if (!IsMoving)
         {
-            _gameManager.PowerPlantMenu.ShowPowerPlantMenu(Identifier);
+            EventAggregator.Instance.Publish(new ShowMenuMessage(MenuBuildingType.PowerPlant, Identifier));
         }
         base.OnMouseDown();
     }

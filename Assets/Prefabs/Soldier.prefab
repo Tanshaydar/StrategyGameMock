@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1291774332680718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.3288896, y: 1.3200002, z: 0}
+  m_LocalPosition: {x: -2.3288896, y: 0.68000025, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,12 +78,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523824d76e3814fa8a7e68454e31e276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SoldierUp: {fileID: 21300000, guid: 92e469fcff848314980e459f10333a5c, type: 3}
-  SoldierDown: {fileID: 21300000, guid: 485bfa1b77aa5cf4894429cea4838ed9, type: 3}
-  SoldierRight: {fileID: 21300000, guid: 9e1913a7ba847d042952cbb327432886, type: 3}
-  SoldierLeft: {fileID: 21300000, guid: 435a39f93868ec94d84956341f76afb6, type: 3}
-  startGridPosition: {x: 20, y: 11}
-  moveSpeed: 1
 --- !u!212 &212849333545184924
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -125,4 +119,3 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0

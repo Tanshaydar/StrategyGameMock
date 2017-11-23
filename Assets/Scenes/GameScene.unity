@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 9
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 8
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_ShadowMaskMode: 2
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -243,7 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0b2f64b7c49e44a9676ba56d504d1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BarrackMenu: {fileID: 1345668337}
   MenuText: {fileID: 378256442}
 --- !u!1 &259086410
 GameObject:
@@ -885,7 +884,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MenuText: {fileID: 977626032}
-  PowerPlantMenu: {fileID: 174922570}
 --- !u!1 &1366011502
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,15 +980,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80bafa6483f8411e9b66b5001694a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProductionPanel: {fileID: 2127385409}
   PowerPlantMenu: {fileID: 174922572}
   BarrackMenu: {fileID: 1345668339}
-  InformationPanel: {fileID: 953621510}
-  Map: {fileID: 616158164}
+  MapParent: {fileID: 616158164}
   GridBox: {fileID: 1543027600636572, guid: 89951ed67a172354ab9af845e26da2c1, type: 2}
   Barrack: {fileID: 1753328976436350, guid: a8bccdb05e4a3154ba5c15a554f424a9, type: 2}
   PowerPlant: {fileID: 1235339842080454, guid: ac9039d520e61034eb1f71b66c390a20, type: 2}
-  Soldier: {fileID: 1291774332680718, guid: a2cfb0c7b1f0e03478bf4c40a2468304, type: 2}
+  SoldierPrefab: {fileID: 1291774332680718, guid: a2cfb0c7b1f0e03478bf4c40a2468304,
+    type: 2}
 --- !u!4 &1862871286
 Transform:
   m_ObjectHideFlags: 0

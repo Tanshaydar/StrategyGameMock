@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AStar;
+using EventAggregation;
+using EventAggregation.Messages;
 using UnityEngine;
 
 public abstract class PlaceableMapItem : MapItem
 {
-
-    protected GameManager _gameManager;
-
     public bool IsMoving { get; private set; }
     private Vector3 _snapPosition;
     private HashSet<Collider2D> availableCells;
     private HashSet<Collider2D> forbiddenCells;
     protected int minX = Int32.MaxValue, minY = Int32.MaxValue;
 
-    public virtual void Awake()
+    protected virtual void Awake()
     {
-        _gameManager = FindObjectOfType<GameManager>();
     }
 
     public virtual void Start()
@@ -42,6 +41,8 @@ public abstract class PlaceableMapItem : MapItem
         {
             IsMoving = false;
             float xPos = 0, yPos = 0;
+
+            var points = new List<Point>();
             foreach (var availableGrid in availableCells)
             {
                 xPos += availableGrid.transform.position.x;
@@ -51,8 +52,10 @@ public abstract class PlaceableMapItem : MapItem
                 int y = int.Parse(splitter[1]);
                 if (x < minX) minX = x;
                 if (y < minY) minY = y;
-                _gameManager.AddWall(x, y);
+                points.Add(new Point(x, y));
             }
+            EventAggregator.Instance.Publish(new AddWallMessage(points));
+
             xPos = xPos / availableCells.Count;
             yPos = yPos / availableCells.Count;
 
@@ -85,7 +88,7 @@ public abstract class PlaceableMapItem : MapItem
             int x = int.Parse(splitter[0]);
             int y = int.Parse(splitter[1]);
 
-            if (_gameManager.Grid[x, y].IsWall)
+            if (!GameManager.Map[x, y].IsWalkable)
             {
                 forbiddenCells.Add(other);
             }
@@ -116,7 +119,7 @@ public abstract class PlaceableMapItem : MapItem
             int x = int.Parse(splitter[0]);
             int y = int.Parse(splitter[1]);
 
-            if (_gameManager.Grid[x, y].IsWall)
+            if (!GameManager.Map[x, y].IsWalkable)
             {
                 forbiddenCells.Remove(other);
             }

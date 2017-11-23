@@ -1,23 +1,20 @@
-﻿using UnityEngine;
+﻿using EventAggregation;
+using EventAggregation.Messages;
+using UiItems;
 using UnityEngine.UI;
 
-public class PowerPlantMenu : MonoBehaviour
+public class PowerPlantMenu : BaseMenu
 {
     public Text MenuText;
-    private GameManager _gameManager;
 
-    public void Awake()
+    public PowerPlantMenu()
     {
-        _gameManager = FindObjectOfType<GameManager>();
+        Type = MenuBuildingType.PowerPlant;
     }
 
-    public void ShowPowerPlantMenu(int identifier)
+    protected override void Show(int identifier)
     {
-        if (_gameManager == null)
-        {
-            _gameManager = FindObjectOfType<GameManager>();
-        }
-        _gameManager.DisableMenus();
+        EventAggregator.Instance.Publish(new HideMenuExceptMessage(MenuBuildingType.PowerPlant));
         gameObject.SetActive(true);
         MenuText.text = "Power Plant #" + identifier;
     }
